@@ -1,5 +1,5 @@
 # Pose-Segment-Anything
-The **core idea** of this project is inspired by [Grounded-Segment-Anything](https://github.com/IDEA-Research/Grounded-Segment-Anything). We **combined the pose estimation models so as to make use of the point prompt of [Segment Anything](https://github.com/facebookresearch/segment-anything). And then we can edit any part of the body with inpainting[stable diffusion](https://github.com/CompVis/stable-diffusion). A simple but interesting workflow pipeline for combining strong expert models**.
+The **core idea** of this project is inspired by [Grounded-Segment-Anything](https://github.com/IDEA-Research/Grounded-Segment-Anything). We **combine the pose estimation models so as to make use of the point prompt of [Segment Anything](https://github.com/facebookresearch/segment-anything). And then we can edit any part of the body with inpainting[stable diffusion](https://github.com/CompVis/stable-diffusion). A simple but interesting workflow pipeline for combining strong expert models**.
 
 ## Demo Preview
 **HR-SAM:Automatic Labeling Components of the human body**
