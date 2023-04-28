@@ -36,3 +36,10 @@ Here is the link:[SAM](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h
 
 4.Execute appHRSAMDIFF.py Have fun with WebUI and get your own 'Human body modification program'
 
+### Contributors
+
+Yuming Qiao, Fanyi Wang, Yanhao Zhang
+
+<a href="https://github.com/puppynull/Pose-Segment-Anything/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=puppynull/Pose-Segment-Anything" />
+</a>
