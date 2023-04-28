@@ -33,5 +33,6 @@ pip install -r requirements.txt
 Here is the link:[SAM](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth). [HRNet](https://drive.google.com/file/d/1UoJhTtjHNByZSm96W3yFTfU5upJnsKiS/view).
 
 3.Execute demo of HR-SAM of HR-SAM-Diffusion with your own image.
-4.Have fun with WebUI and get your own 'Human body modification program'
+
+4.Execute appHRSAMDIFF.py Have fun with WebUI and get your own 'Human body modification program'
 
