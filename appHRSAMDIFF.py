@@ -29,9 +29,21 @@ def detectbyHRNet(img,pth,joint_li):
     for i in range(joint_value.shape[0]):
         dic_joint[list_joint[i]] = np.round(joint_value[i, :-1]).astype(int)
     print(dic_joint)
-    np_promt = np.zeros((len(joint_li), 2))
-    for i in range(len(joint_li)):
-        np_promt[i, :] = dic_joint[joint_li[i]].reshape(1, 2)
+    name_li = []
+    for joint_li_index in joint_li:
+        if(joint_li_index == 'head'):
+            name_li += ["nose", "left_eye", "right_eye"]
+        elif(joint_li_index == 'left_arm'):
+            name_li += ["left_shoulder", "left_elbow", "left_wrist"]
+        elif(joint_li_index == 'right_arm'):
+            name_li += ["right_shoulder", "right_elbow", "right_wrist"]
+        elif(joint_li_index == 'left_leg'):
+            name_li += ["left_hip", "left_knee", "left_ankle"]
+        elif(joint_li_index == 'right_leg'):
+            name_li += ["right_hip", "right_knee", "right_ankle"]
+    np_promt = np.zeros((len(name_li), 2))
+    for i in range(len(name_li)):
+        np_promt[i, :] = dic_joint[name_li[i]].reshape(1, 2)
         # np_promt = np.append(np_promt, dic_joint[i].reshape(1,dic_joint[i].shape[0]),axis=0)
 
     np_promt = np_promt.astype(int)
@@ -142,22 +154,26 @@ def save_img(img, path_save):
 
     cv2.imwrite(path_save,img)
     return
-
+def sizecontrol(img_seg, img_merge, img_diff):
+    return img_seg, img_merge, img_diff
 
 with gr.Blocks() as demo:
     gr.Markdown("Auto seg with HR--SAM.")
     with gr.Tab("Auto labeling by point"):
         with gr.Row():
             with gr.Column():
-                pth_SAM = gr.Dropdown(['sam_vit_h_4b8939.pth','pretrained_models/model_13_2_2_2_epoch_580.pth','pretrained_models/model_13_2_2_2_epoch_580.pth'],
+                pth_SAM = gr.Dropdown(['sam_vit_h_4b8939.pth'],
                                     label='SAM pth', info='choose SAM pth')
-                pth_HRNet = gr.Dropdown(['pose_hrnet_w48_384x288.pth','pose_hrnet_w48_384x288.pth','pose_hrnet_w48_384x288.pth'],
+                pth_HRNet = gr.Dropdown(['pose_hrnet_w48_384x288.pth'],
                                         label='HRNet pth', info='choose HRNet pth')
             # pth_save = gr.Textbox('imgsavepth')
             #     joint_li = gr.Dropdown(["nose", "left_eye", "right_eye","left_ear","right_ear","left_shoulder","right_shoulder","left_elbow","right_elbow","left_wrist","right_wrist","left_hip",
             #   "right_hip","left_knee","right_knee","left_ankle","right_ankle"], label='choose the joint you want', info='choose point')
-                joint_li = gr.CheckboxGroup(["nose", "left_eye", "right_eye","left_ear","right_ear","left_shoulder","right_shoulder","left_elbow","right_elbow","left_wrist","right_wrist","left_hip",
-              "right_hip","left_knee","right_knee","left_ankle","right_ankle"], label='choose the joint you want', info='choose point')
+            #     joint_li = gr.CheckboxGroup(["nose", "left_eye", "right_eye","left_ear","right_ear","left_shoulder","right_shoulder","left_elbow","right_elbow","left_wrist","right_wrist","left_hip",
+            #   "right_hip","left_knee","right_knee","left_ankle","right_ankle"], label='choose the joint you want', info='choose point')
+                joint_li = gr.CheckboxGroup(
+                    ["head", "left_arm", "right_arm", "left_leg", "right_leg"],
+                    label='choose the joint you want', info='choose point')
                 promp_text = gr.Textbox(label='prompt for stablediffusion')
                 image_input_seg = gr.Image()
                 with gr.Column():
@@ -165,6 +181,7 @@ with gr.Blocks() as demo:
                         button_segall = gr.Button('seg entire img')
                         button_segpoint = gr.Button('seg with HR point')
                     button_inpaint = gr.Button('diffusion with prompt')
+                    button_nouse = gr.Button('control size(never mind)')
             with gr.Column():
                 mask_output = gr.Image()
                 seg_output = gr.Image()
@@ -173,6 +190,7 @@ with gr.Blocks() as demo:
     button_segall.click(SegWithSAM, inputs=[image_input_seg, pth_SAM], outputs=[mask_output,merge_output,seg_output])
     button_segpoint.click(Segwithpointprompt, inputs=[image_input_seg, pth_SAM, pth_HRNet, joint_li], outputs=[mask_output,merge_output,seg_output])
     button_inpaint.click(inpainting, inputs=[image_input_seg, mask_output, promp_text], outputs=[inpaint_output])
+    button_nouse.click(sizecontrol, inputs=[seg_output,merge_output,inpaint_output], outputs=[seg_output,merge_output,inpaint_output])
 
     # text_button_1.click(reverse_text, inputs=text_input_1, outputs=text_output_1)
 
